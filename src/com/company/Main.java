@@ -11,29 +11,30 @@ public class Main {
 
     public static void main(String[] args) {
         //Set System Property to Chrom .exe file to invoke the browser below
-        System.setProperty("webdriver.chrome.driver", "C:\\Work\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Aisha Hlatshwayo\\Desktop\\chromedriver.exe");
 
         //Invoke the test in Chrome Driver = creating an object for my driver
         WebDriver driver = new ChromeDriver();
+        driver.get("http://the-internet.herokuapp.com/frames");//Simply opening the website
+        driver.manage().window().maximize();//Maximizing the browser
+
         //Implicit Wait Machine - When your code/test executes faster than your browser, test works with elements that are not there.
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 
-        driver.get("http://the-internet.herokuapp.com/frames");
-        driver.manage().window().maximize();
+        //Clicking the nested Frames link
+        driver.findElement(By.linkText("Nested Frames")).click();
+        //Getting the number of Frames
+       int number_of_iframes =  driver.findElements(By.tagName("frame")).size();//Instantiating a variable for the size of the frames there in in the browser
+        System.out.println("Number of frames: " + number_of_iframes);//Printing out the number of frames
+        driver.switchTo().frame("frame-top");//Switch to Top-Frame
+        System.out.println("Switch to Top-Frame");
 
-        driver.findElement(By.xpath("//a[contains(text(),'Nested Frames')]")).click();
-//        //Find the number on frames -> How many frames are present in this execution.
-        System.out.println(driver.findElements(By.tagName("frame")).size());
-
-        System.out.println("********We are switch to the frame*******");
-//        //Switch frame with index
-//        driver.switchTo().parentFrame();
-        System.out.println(driver.switchTo().frame(1));
-
-        Actions actions = new Actions(driver);
-
-        driver.switchTo().frame(driver.findElement(By.cssSelector("//frameset[1]/frame[2]")));
-        System.out.println(driver.switchTo().frame(driver.findElement(By.xpath("/html[1]/body[1]/div[1]")).getText()));
+//        driver.switchTo().defaultContent(); //Swithing to main page
+//        driver.switchTo().frame(driver.findElement(By.xpath("//frameset[@name='frameset-middle']")));//frameset-middle
+        driver.switchTo().defaultContent(); //Swithing to main page
+        driver.switchTo().frame(driver.findElement(By.xpath("//frameset[1]/frame[1]")));//Swithch to To
+        driver.switchTo().defaultContent(); //Swithing to main page
+        System.out.println(driver.switchTo().frame(driver.findElement(By.xpath("//frameset[1]/frame[2]")).getText()));
 
     }
 }
